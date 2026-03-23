@@ -5,27 +5,27 @@ def extract_nubank_credit_card(file_path: str) -> pd.DataFrame:
     """
     Lê um arquivo OFX de cartão de crédito do Nubank e retorna um DataFrame.
     """
-    # 1. Abrimos o arquivo em modo binário ('rb') para evitar problemas de codificação (encoding)
     with open(file_path, 'rb') as fileobj:
         ofx = OfxParser.parse(fileobj)
     
-    # 2. Navegamos até a lista de transações
+    # Capturando as transações e a data de fechamento/vencimento da fatura atual
     transactions = ofx.account.statement.transactions
     
-    # 3. Criamos uma lista vazia para guardar os dados extraídos
+    # NOVA LINHA: Pegamos a data final do extrato (que o Nubank usa como referência da fatura)
+    data_fatura = ofx.account.statement.end_date
+    
     data = []
     
-    # 4. Loop para extrair as informações de cada compra
     for txn in transactions:
         data.append({
-            'id_transacao': txn.id,       # Importante para evitar duplicidades no futuro
-            'data_compra': txn.date,      # Quando a compra foi feita
-            'valor': txn.amount,          # O valor (atenção aos sinais positivo/negativo)
-            'descricao': txn.memo,        # O nome do estabelecimento (ex: "UBER", "MERCADO")
-            'tipo': txn.type              # Débito ou Crédito
+            'id_transacao': txn.id,       
+            'data_compra': txn.date,      
+            'valor': txn.amount,          
+            'descricao': txn.memo,        
+            'tipo': txn.type,
+            'data_fatura': data_fatura    # NOVA COLUNA: Carimba a qual fatura essa compra pertence
         })
         
-    # 5. Transformamos a lista em um DataFrame do Pandas e retornamos
     df = pd.DataFrame(data)
     
     return df
