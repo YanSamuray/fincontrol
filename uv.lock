@@ -350,7 +350,7 @@ dependencies = [
 requires-dist = [
     { name = "notebook", specifier = ">=7.5.5" },
     { name = "ofxparse", specifier = ">=0.21" },
-    { name = "pandas", specifier = ">=3.0.1" },
+    { name = "pandas", specifier = ">=2.2.0" },
     { name = "pyarrow", specifier = ">=23.0.1" },
 ]
 
