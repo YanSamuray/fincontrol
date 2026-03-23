@@ -8,4 +8,5 @@ dependencies = [
     "notebook>=7.5.5",
     "ofxparse>=0.21",
     "pandas>=3.0.1",
+    "pyarrow>=23.0.1",
 ]
